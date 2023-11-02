@@ -7,7 +7,7 @@ CC = gcc
 CFLAGS = -Wall -Wextra -g
 
 # Source files (.c files)
-CFILES = main.c
+CFILES = main.c first_fit.c print_bitmap.c
 
 # Header files (.h files)
 HFILES = utilities.h
@@ -16,7 +16,7 @@ HFILES = utilities.h
 OBJFILES = $(CFILES:.c=.o)
 
 # Output executable name
-OUT = MyProject
+OUT = main
 
 # Main target
 $(OUT): $(OBJFILES)
