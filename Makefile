@@ -7,7 +7,7 @@ CC = gcc
 CFLAGS = -Wall -Wextra -g
 
 # Source files (.c files)
-CFILES = main.c math_functions.c string_functions.c
+CFILES = main.c
 
 # Header files (.h files)
 HFILES = utilities.h
@@ -20,18 +20,18 @@ OUT = MyProject
 
 # Main target
 $(OUT): $(OBJFILES)
-# Compiling and linking all object files into an executable
-$(CC) $(CFLAGS) -o $(OUT) $(OBJFILES)
+	# Compiling and linking all object files into an executable
+	$(CC) $(CFLAGS) -o $(OUT) $(OBJFILES)
 
 # Rule for generating object files
 %.o: %.c $(HFILES)
-# Compiling source files into object files
-$(CC) $(CFLAGS) -c $< -o $@
+	# Compiling source files into object files
+	$(CC) $(CFLAGS) -c $< -o $@
 
 # Phony target to remove all build files
 .PHONY: clean
 clean:
-# Removing object files and the executable
-rm -f $(OBJFILES) $(OUT)
+	# Removing object files and the executable
+	rm -f $(OBJFILES) $(OUT)
 
 # end of Makefile
