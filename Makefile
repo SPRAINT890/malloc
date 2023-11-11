@@ -7,7 +7,7 @@ CC = gcc
 CFLAGS = -Wall -Wextra -g
 
 # Source files (.c files)
-CFILES = main.c first_fit.c print_bitmap.c
+CFILES = main.c first_fit.c print_bitmap.c free_bits.c
 
 # Header files (.h files)
 HFILES = utilities.h
