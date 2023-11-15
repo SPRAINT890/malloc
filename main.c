@@ -2,12 +2,11 @@
 
 int main() {
     unsigned char bitmap[BITMAP_SIZE] = {0};
+
     size_t units_needed;
     size_t units_remove;
     size_t units_index;
     int option;
-
-
 
     // Imprime el bitmap inicial
     printf("Bitmap inicial: ");
@@ -40,6 +39,10 @@ int main() {
             scanf("%zu", &units_index);
             printf("\nIngrese la cantidad de bits a borrar: ");
             scanf("%zu", &units_remove);
+            if(units_index + units_remove > BITMAP_SIZE * 8){
+                printf("\nBits fuera de rango\n");
+                return 0;
+            }       
             free_bits(bitmap, BITMAP_SIZE, units_remove, units_index);
 
             printf("\nSe Quitaron %zu bits a partir del índice %zu.\n", units_remove, units_index);
