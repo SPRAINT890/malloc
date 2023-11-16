@@ -1,7 +1,7 @@
 #include "my_malloc_manager.h"
 
 int main() {
-    unsigned char bitmap[BITMAP_SIZE] = {0};
+    MemoryChunkHeader* chunk = create_new_chunk(BITMAP_SIZE, 0, 0);
 
     size_t units_needed;
     size_t units_remove;
@@ -9,8 +9,8 @@ int main() {
     int option;
 
     // Imprime el bitmap inicial
-    printf("Bitmap inicial: ");
-    print_bitmap(bitmap, BITMAP_SIZE);
+    printf("Bitmap inicial: \n");
+    print_bitmap(chunk->bitmap, chunk->bitmap_size);
 
     while(true){
         printf("1- Agregar bits\n");
@@ -22,12 +22,12 @@ int main() {
             printf("Ingrese la cantidad de bits necesarios: ");
             scanf("%zu", &units_needed);
             printf("%zu\n", units_needed);
-            int index = first_fit(bitmap, BITMAP_SIZE, units_needed);
+            int index = first_fit(chunk->bitmap, chunk->bitmap_size, units_needed);
 
             if (index != -1) {
                 printf("Se asignaron %zu bits a partir del índice %d.\n", units_needed, index);
                 printf("Bitmap después de la asignación: ");
-                print_bitmap(bitmap, BITMAP_SIZE);
+                print_bitmap(chunk->bitmap, chunk->bitmap_size);
             } else {
                 printf("No hay suficiente espacio para asignar %zu bits.\n", units_needed);
                 break;
@@ -43,11 +43,11 @@ int main() {
                 printf("\nBits fuera de rango\n");
                 return 0;
             }       
-            free_bits(bitmap, BITMAP_SIZE, units_remove, units_index);
+            free_bits(chunk->bitmap, chunk->bitmap_size, units_remove, units_index);
 
             printf("\nSe Quitaron %zu bits a partir del índice %zu.\n", units_remove, units_index);
             printf("Bitmap después de borrar: ");
-            print_bitmap(bitmap, BITMAP_SIZE);
+            print_bitmap(chunk->bitmap, chunk->bitmap_size);
         }
     }
     return 0;

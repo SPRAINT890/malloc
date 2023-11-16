@@ -5,5 +5,4 @@ void free_bits(unsigned char *bitmap, size_t bitmap_size, size_t units_to_free, 
         size_t byte = i / 8;
         bitmap[byte] &= ~(1 << (7 -(i % 8)));
     }
-    printf("Unidades liberadas correctamente.\n");
 }

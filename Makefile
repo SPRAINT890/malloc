@@ -10,7 +10,7 @@ CFLAGS = -Wall -Wextra -g
 CFILES = main.c first_fit.c print_bitmap.c free_bits.c create_new_chunk.c
 
 # Header files (.h files)
-HFILES = utilities.h
+HFILES = my_malloc_manager.h
 
 # Object files (.o files)
 OBJFILES = $(CFILES:.c=.o)
