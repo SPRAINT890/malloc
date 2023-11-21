@@ -1,7 +1,6 @@
 #include "my_malloc_manager.h"
 MemoryChunkHeader* create_new_chunk(uint16_t units_needed, int is_large_allocation, MemoryChunkHeader *next) {
     void *mem = mmap(NULL, units_needed * UNIT_SIZE, PROT_READ | PROT_WRITE, MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
-
     if (mem == MAP_FAILED) {
         error(EXIT_FAILURE, errno, "Memory mapping failed");
     }
@@ -15,8 +14,8 @@ MemoryChunkHeader* create_new_chunk(uint16_t units_needed, int is_large_allocati
     chunk->is_large_allocation = is_large_allocation;
     chunk->chunk_total_units = total_units_to_mmap;
     chunk->chunk_available_units = units_needed - used_units; // Ajustar por el tamaño del encabezado
-    chunk->bitmap = (Bitmap)((char*)(chunk) + STRUCT_UNITS * UNIT_SIZE); // Justo después del encabezado
-    chunk->bitmap_size = BITMAP_SIZE;
+    chunk->bitmap = is_large_allocation ? NULL : (Bitmap)((char*)(chunk) + STRUCT_UNITS * UNIT_SIZE); // Justo después del encabezado
+    chunk->bitmap_size = is_large_allocation ? NULL : BITMAP_SIZE;
     chunk->next = next;
 
     // Inicializar el bitmap a 0 manualmente

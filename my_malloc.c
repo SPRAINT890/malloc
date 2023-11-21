@@ -22,6 +22,10 @@ void *my_malloc(size_t nbytes)
     }
 
     for (chunk = first_chunk; chunk != NULL; chunk = chunk->next){
+        if (chunk->is_large_allocation == 1){
+            continue;
+        }
+        
         // Attempt to find the first fit in the bitmap
         printf("unidades necesitadas %hd. \n", units_needed);
         printf("Se esta buscando en el chunk id %hd. \n", chunk->id);
@@ -44,28 +48,29 @@ void *my_malloc(size_t nbytes)
     }
 
     if (chunk == NULL){ // have to create a new standard chunk, and will insert it right after the first chunk
-        printf("\n%u\n", units_needed);
-        printf("\n%u\n", UNITS_PER_CHUNK);
         if (units_needed > UNITS_PER_CHUNK){
             printf("\nSe necesita crear un nuevo chunk largo. se necesita %hd units. \n", units_needed);
             first_chunk->next = create_new_chunk(units_needed, 1, first_chunk->next);
+            chunk = first_chunk->next;
+            bit_index = STRUCT_UNITS;
         }else{
             printf("\nSe necesita crear un nuevo chunk estandar. se necesita %hd units. \n", units_needed);
             first_chunk->next = create_new_chunk(units_needed, 0, first_chunk->next);
-
-        chunk = first_chunk->next;
-        bit_index = first_fit(chunk->bitmap, chunk->bitmap_size, units_needed);
+            chunk = first_chunk->next;
+            bit_index = first_fit(chunk->bitmap, chunk->bitmap_size, units_needed);
+            
+        }
+        
         if (bit_index == -1)
         { // should never happen
             printf("Not enough space for first fit in chunk id %u hd\n", chunk->id);
             // error (EXIT_FAILURE, 0, "bit index return -1 on new chunk, programming error. Exiting.");
         }
-        }
     }
     printf("\nSe encontro un hueco en chunk ID %hd en el bit index %d\n", chunk->id, bit_index);
-    first_chunk->chunk_available_units -= units_needed;
+    chunk->chunk_available_units -= units_needed;
     size_t offset = bit_index * UNIT_SIZE;
-    AllocationHeader *allocation_header = (AllocationHeader *)((char *)first_chunk->addr + offset);
+    AllocationHeader *allocation_header = (AllocationHeader *)((char *)chunk->addr + offset);
     allocation_header->nunits = units_needed;
     allocation_header->bit_index = bit_index;
     return (char *)allocation_header + sizeof(AllocationHeader);

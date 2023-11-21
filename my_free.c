@@ -20,6 +20,19 @@ void my_free(void *ptr, int id_a_borrar) {
         chunk = chunk->next;
     }
 
+    if (chunk->is_large_allocation == 1){
+        MemoryChunkHeader *chunk2 = first_chunk;
+        MemoryChunkHeader *temp;
+        while (chunk2 != NULL){
+            temp = chunk2->next;
+            if(temp->id == id_a_borrar){
+                chunk2->next = temp->next;
+                print_varius_bitmap(first_chunk);
+                return;
+            }
+        }
+    }
+    
     chunk->chunk_available_units += units;
     if (!chunk) {
         fprintf(stderr, "Invalid pointer passed to my_free.\n");
