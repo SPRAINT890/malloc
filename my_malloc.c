@@ -35,24 +35,22 @@ void *my_malloc(size_t nbytes){
         } else {// found!
             printf("Se encontro un espacio en el bit index %d\n", bit_index);
         }
-    }
-
-    if (chunk == NULL) {// have to create a new standard chunk, and will insert it right after the first chunk
-        printf("\nNew chunk for standard allocation will be created. We need %hd units. \n", units_needed);
+        
+        if (chunk == NULL) {// have to create a new standard chunk, and will insert it right after the first chunk
+        printf("\nSe necesita crear un nuevo chunk estandar. se necesita %hd units. \n", units_needed);
         chunk = first_chunk->next = create_new_chunk (units_needed, 0, first_chunk->next); // 0 means FALSE is_large_allocation
         bit_index = first_fit(chunk->bitmap, chunk->bitmap_size, units_needed);
-        if (bit_index == -1) { // should never happen
-            printf("Not enough space for first fit in chunk id %u hd\n", chunk->id);
-            // error (EXIT_FAILURE, 0, "bit index return -1 on new chunk, programming error. Exiting.");
+            if (bit_index == -1) { // should never happen
+                printf("Not enough space for first fit in chunk id %u hd\n", chunk->id);
+                // error (EXIT_FAILURE, 0, "bit index return -1 on new chunk, programming error. Exiting.");
+            }
         }
     }
-    printf("\nFound a hole in chunk id %hd at bit index %d\n", chunk->id, bit_index);
-    
-    chunk->chunk_available_units -= units_needed;
+    printf("\nSe encontro un hueco en %hd en el bit index %d\n", first_chunk->id, bit_index);
+    first_chunk->chunk_available_units -= units_needed;
     size_t offset = bit_index * UNIT_SIZE;
-    AllocationHeader *allocation_header = (AllocationHeader *) ((char *) chunk->addr + offset);
+    AllocationHeader *allocation_header = (AllocationHeader *) ((char *) first_chunk->addr + offset);
     allocation_header->nunits = units_needed;
     allocation_header->bit_index = bit_index;
-
     return (char *) allocation_header + sizeof (AllocationHeader);
 }
