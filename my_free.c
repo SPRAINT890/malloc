@@ -1,22 +1,26 @@
 #include "my_malloc_manager.h"
 
-void my_free(void *ptr) {
+void my_free(void *ptr, int id_a_borrar) {
     if (ptr == NULL) {
         return;
     }
-
     // Obtenga el encabezado de la asignación 
     AllocationHeader *header = (AllocationHeader *)(((char *)ptr) - sizeof(AllocationHeader));
-
     // Obtener el encabezado del bloque de memoria
     MemoryChunkHeader *chunk = (MemoryChunkHeader *)(((char *)header) - header->bit_index * UNIT_SIZE);
-
     // Obtenemos el número de unidades de la asignación
     uint16_t units = header->nunits;
-
     // Actualiza las unidades disponibles en el chunk
-    chunk->chunk_available_units += units;
 
+    while (chunk != NULL){
+        if(chunk->id == id_a_borrar){ 
+            printf("\n\n\nEncontre el chunk\n\n");
+            break;
+        }
+        chunk = chunk->next;
+    }
+
+    chunk->chunk_available_units += units;
     if (!chunk) {
         fprintf(stderr, "Invalid pointer passed to my_free.\n");
         exit(EXIT_FAILURE);
@@ -26,6 +30,6 @@ void my_free(void *ptr) {
     uint16_t bit = header->bit_index % 8;
     set_or_clear_bits(0, chunk->bitmap, byte, bit, units);
     printf("\n");
-    print_bitmap(chunk->bitmap, BITMAP_SIZE);
+    print_varius_bitmap(first_chunk);
     printf("Freeing %d units from chunk %p\n", units, chunk);
 }

@@ -13,9 +13,7 @@ int first_fit(unsigned char *bitmap, size_t bitmap_size, size_t units_needed) {
             }
             consecutive_zeros++;
             if (consecutive_zeros == units_needed) {
-                for (size_t j = first_bit_index; j < units_needed+first_bit_index; j++) {
-                    bitmap[j / 8] |= (1 << (7-(j % 8)));
-                }
+                set_or_clear_bits(1, bitmap, first_bit_index / 8, first_bit_index % 8, units_needed);
                 return first_bit_index;
             }
         } else {

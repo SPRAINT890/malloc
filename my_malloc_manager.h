@@ -48,12 +48,13 @@ extern int first_fit(unsigned char *bitmap, size_t bitmap_size, size_t units_nee
 extern void free_bits(unsigned char *bitmap, size_t bitmap_size, size_t units_to_free, size_t unit_index);
 extern void print_bitmap(Bitmap bitmap, uint16_t bitmap_size);
 extern void *my_malloc(size_t nbytes);
-extern void my_free(void *ptr);
+extern void my_free(void *ptr, int id_a_borrar);
 extern void set_or_clear_bits(int set, Bitmap bitmap, uint16_t start_byte_index, uint16_t start_bit_index, uint16_t qty);
 extern uint16_t id;
 extern void my_malloc_init();
 extern MemoryChunkHeader* first_chunk;
 extern MemoryChunkHeader* create_new_chunk(uint16_t units_needed, int is_large_allocation, MemoryChunkHeader *next);
+extern void print_varius_bitmap(MemoryChunkHeader* chunk);
 
 
 #endif // MY_ALLOC_MANAGER_H
