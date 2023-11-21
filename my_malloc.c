@@ -55,7 +55,7 @@ void *my_malloc(size_t nbytes)
             bit_index = STRUCT_UNITS;
         }else{
             printf("\nSe necesita crear un nuevo chunk estandar. se necesita %hd units. \n", units_needed);
-            first_chunk->next = create_new_chunk(units_needed, 0, first_chunk->next);
+            first_chunk->next = create_new_chunk(UNITS_PER_CHUNK, 0, first_chunk->next);
             chunk = first_chunk->next;
             bit_index = first_fit(chunk->bitmap, chunk->bitmap_size, units_needed);
             
