@@ -28,6 +28,7 @@ typedef unsigned char *Bitmap;
 typedef struct MemoryChunkHeader // All chunks have this header
 {
     uint16_t id;                    // id of the chunk, useful for debugging
+    void *addr;
     uint16_t is_large_allocation;   // Flag to indicate if this is for a single large allocation
     uint16_t chunk_total_units;     // Size of the memory block in units
     uint16_t chunk_available_units; // How many units are available
@@ -46,7 +47,13 @@ typedef struct AllocationHeader // All malloc calls have a this header located b
 extern int first_fit(unsigned char *bitmap, size_t bitmap_size, size_t units_needed);
 extern void free_bits(unsigned char *bitmap, size_t bitmap_size, size_t units_to_free, size_t unit_index);
 extern void print_bitmap(Bitmap bitmap, uint16_t bitmap_size);
-void*create_new_chunk(uint16_t units_needed, int is_large_allocation, MemoryChunkHeader *next);
+extern void *my_malloc(size_t nbytes);
+extern void my_free(void *ptr);
+extern void set_or_clear_bits(int set, Bitmap bitmap, uint16_t start_byte_index, uint16_t start_bit_index, uint16_t qty);
+extern uint16_t id;
+extern void my_malloc_init();
+extern MemoryChunkHeader* first_chunk;
+extern MemoryChunkHeader* create_new_chunk(uint16_t units_needed, int is_large_allocation, MemoryChunkHeader *next);
 
 
 #endif // MY_ALLOC_MANAGER_H
