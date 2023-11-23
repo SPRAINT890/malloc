@@ -68,7 +68,7 @@ void *my_malloc(size_t nbytes)
     }
     printf("\nSe encontro un hueco en chunk ID %hd en el bit index %d\n", chunk->id, bit_index);
     chunk->chunk_available_units -= units_needed;
-    size_t offset = (chunk->is_large_allocation ? STRUCT_UNITS : UNITS_PER_CHUNK) * UNIT_SIZE;
+    size_t offset = bit_index * UNIT_SIZE;
     AllocationHeader *allocation_header = (AllocationHeader *)((char *)chunk->addr + offset);
     allocation_header->nunits = units_needed;
     allocation_header->bit_index = bit_index;
