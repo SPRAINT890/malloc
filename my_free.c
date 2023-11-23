@@ -33,5 +33,5 @@ void my_free(void *ptr) {
     }
     printf("\n");
     print_varius_bitmap(first_chunk);
-    printf("Freeing %d units from chunk %p\n", units, chunk);
+    printf("\n\nLiberando %d unidades del chunk %p\n", units, chunk);
 }
