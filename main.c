@@ -10,7 +10,6 @@ int main() {
     size_t units_needed;
     int option;
     void* puntero_borrar;
-    int id_a_borrar;
 
     // Imprime el bitmap inicial
     while(true){
@@ -32,16 +31,16 @@ int main() {
             printf("El puntero es %p\n", puntero);
             printf("El id del chunk es %u\n", chunk->id);
             printf("El total de unidades del chunk es: %u\n", chunk->chunk_total_units);
-            printf("Las unidades disponibles en el chunk es: %u\n", chunk->chunk_available_units);
+            if (!chunk->is_large_allocation){
+                printf("Las unidades disponibles en el chunk es: %u\n", chunk->chunk_available_units);
+            }
             print_varius_bitmap(first_chunk);
         }
         if(option == 2){
             printf("\n--- Liberar Bytes ---\n");
             printf("Ingrese el puntero del dato a borrar: ");
             scanf("%p", &puntero_borrar);
-            printf("Ingrese el id del chunk: ");
-            scanf("%d", &id_a_borrar);
-            my_free(puntero_borrar, id_a_borrar);
+            my_free(puntero_borrar);
         }
     }
     return 0;
