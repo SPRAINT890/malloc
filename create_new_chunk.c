@@ -14,8 +14,8 @@ MemoryChunkHeader* create_new_chunk(uint16_t units_needed, int is_large_allocati
     chunk->is_large_allocation = is_large_allocation;
     chunk->chunk_total_units = total_units_to_mmap;
     chunk->chunk_available_units = units_needed - used_units; // Ajustar por el tamaño del encabezado
-    chunk->bitmap = is_large_allocation ? NULL : (Bitmap)((char*)(chunk) + STRUCT_UNITS * UNIT_SIZE); // Justo después del encabezado
-    chunk->bitmap_size = is_large_allocation ? NULL : BITMAP_SIZE;
+    chunk->bitmap = is_large_allocation ? 0 : (Bitmap)((char*)(chunk) + STRUCT_UNITS * UNIT_SIZE); // Justo después del encabezado
+    chunk->bitmap_size = is_large_allocation ? 0 : BITMAP_SIZE;
     chunk->next = next;
 
     // Inicializar el bitmap a 0 manualmente

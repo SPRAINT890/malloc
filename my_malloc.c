@@ -15,7 +15,6 @@ void *my_malloc(size_t nbytes)
     MemoryChunkHeader *chunk = NULL;
 
     int bit_index;
-    int is_large_allocation = IS_LARGE_ALLOCATION(units_needed);
 
     if (first_chunk == NULL){
         my_malloc_init(); // \nitialize the memory manager
@@ -48,7 +47,7 @@ void *my_malloc(size_t nbytes)
     }
 
     if (chunk == NULL){ // have to create a new standard chunk, and will insert it right after the first chunk
-        if (units_needed > UNITS_PER_CHUNK){
+        if (IS_LARGE_ALLOCATION(units_needed)){
             printf("\nSe necesita crear un nuevo chunk largo. se necesita %hd units. \n", units_needed);
             first_chunk->next = create_new_chunk(units_needed, 1, first_chunk->next);
             chunk = first_chunk->next;
@@ -69,7 +68,7 @@ void *my_malloc(size_t nbytes)
     }
     printf("\nSe encontro un hueco en chunk ID %hd en el bit index %d\n", chunk->id, bit_index);
     chunk->chunk_available_units -= units_needed;
-    size_t offset = bit_index * UNIT_SIZE;
+    size_t offset = (chunk->is_large_allocation ? STRUCT_UNITS : UNITS_PER_CHUNK) * UNIT_SIZE;
     AllocationHeader *allocation_header = (AllocationHeader *)((char *)chunk->addr + offset);
     allocation_header->nunits = units_needed;
     allocation_header->bit_index = bit_index;
